@@ -1,0 +1,105 @@
+{
+	"info": {
+		"_postman_id": "b28a98fb-d134-4086-a1fa-adec16d07df0",
+		"name": "User Management API",
+		"description": "Colección para probar la API de gestión de usuarios",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "13045761"
+	},
+	"item": [
+		{
+			"name": "Create User",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"name\": \"Gustavo Matias Pedron Sanchezsi Mario Luis\",\n  \"lastName\": \"Alvarez Moyano\",\n  \"age\": 35,\n  \"isSubscribed\": false,\n  \"postalCode\": \"12345\"\n}"
+				},
+				"url": {
+					"raw": "{{base_url}}/users",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get User by ID",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/users/b83855fc-65e8-4f55-9a1a-9240f658176a",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"users",
+						"b83855fc-65e8-4f55-9a1a-9240f658176a"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Search_Users",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/users/search?name=Gustavo",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"users",
+						"search"
+					],
+					"query": [
+						{
+							"key": "name",
+							"value": "Gustavo"
+						},
+						{
+							"key": "age",
+							"value": "1",
+							"disabled": true
+						},
+						{
+							"key": "postal_code",
+							"value": "12345",
+							"disabled": true
+						},
+						{
+							"key": "page",
+							"value": "0",
+							"disabled": true
+						},
+						{
+							"key": "size",
+							"value": "10",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:8080"
+		}
+	]
+}
