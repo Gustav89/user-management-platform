@@ -19,7 +19,7 @@ public class UserEntity {
     @Id
     @GeneratedValue
     @Column(name = "uuid", updatable = false, nullable = false)
-    private UUID uuid;
+    private UUID id;
 
     @Column(name = "name", nullable = false)
     private String name;

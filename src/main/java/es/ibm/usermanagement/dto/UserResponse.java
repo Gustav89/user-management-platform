@@ -13,7 +13,7 @@ import java.util.UUID;
 @Builder
 public class UserResponse {
 
-    private UUID uuid;
+    private UUID id;
     private String name;
     private String lastName;
     private Integer age;
