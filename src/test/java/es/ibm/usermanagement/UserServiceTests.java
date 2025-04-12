@@ -31,17 +31,14 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-class UserServiceImplTest {
+class UserServiceTests {
 
     @Mock
     private ISearchUserRepository userRepository;
-
     @Mock
     private IUserMapper userMapper;
-
     @Mock
     private KafkaTemplate<String, UserCreateRequest> kafkaTemplate;
-
     @InjectMocks
     private UserServiceImpl userService;
 
@@ -52,7 +49,7 @@ class UserServiceImplTest {
     }
 
     @Test
-    void createUser_shouldThrowUserAlreadyExistsException_whenUserExists() {
+    void createUserShouldThrowUserAlreadyExistsExceptionWhenUserExistsTest() {
         when(userRepository.existsUserByNaturalKey(any(String.class), any(String.class), any(Integer.class), any(String.class))).thenReturn(true);
         assertThrows(UserAlreadyExistsException.class, () -> userService.createUser(getRequest()));
     }
@@ -112,7 +109,7 @@ class UserServiceImplTest {
     private UserEntity getUser(UUID userId){
 
         return  UserEntity.builder()
-                .uuid(userId)
+                .id(userId)
                 .name("Gustavo")
                 .lastName("Moyano")
                 .age(30)
@@ -123,7 +120,7 @@ class UserServiceImplTest {
     private UserResponse getUserResponse(UUID userId){
 
         return UserResponse.builder()
-                .uuid(userId)
+                .id(userId)
                 .name("Gustavo")
                 .lastName("Moyano")
                 .age(30)

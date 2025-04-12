@@ -18,7 +18,7 @@ Thumbs.db
 /.mvn/
 /target/
 /build/
-
+/database/
 # IntelliJ IDEA specific files
 .idea/**/workspace.xml
 .idea/**/tasks.xml
