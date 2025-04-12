@@ -50,7 +50,7 @@ public class CreateUserServiceTests {
     }
 
     @Test
-    void testCreateUser() throws JsonProcessingException {
+    void createUserTest() throws JsonProcessingException {
 
         when(objectMapper.readValue(userCreateRequestJson, UserCreateRequest.class)).thenReturn(userCreateRequest);
 
@@ -71,7 +71,7 @@ public class CreateUserServiceTests {
     }
 
     @Test
-    void testCreateUserWithJsonProcessingException() throws JsonProcessingException {
+    void createUserWithJsonProcessingExceptionTest() throws JsonProcessingException {
 
         when(objectMapper.readValue(userCreateRequestJson, UserCreateRequest.class)).thenThrow(JsonProcessingException.class);
         try {

@@ -36,31 +36,29 @@ public class createUserKafkaTests {
     private UserServiceImpl userService;
 
     @Test
-    void testCreateUser_Success() {
+    void createUserSuccessTest() {
         UserCreateRequest request = new UserCreateRequest("Gustavo", "Alvarez", 35, true,"1722");
 
-        // Simulamos que el usuario NO existe
         when(userRepository.existsUserByNaturalKey("Gustavo", "Alvarez", 35, "1722")).thenReturn(false);
 
-        // Simulamos el comportamiento del KafkaTemplate
         SettableListenableFuture<SendResult<String, UserCreateRequest>> kafkaFuture = new SettableListenableFuture<SendResult<String, UserCreateRequest>>();
         kafkaFuture.set(mock(SendResult.class));
         when(userCreateRequestKafka.send(eq("user-registration-events"), any(UserCreateRequest.class)))
                 .thenReturn(kafkaFuture);
 
-        // Ejecutamos el método
+
         CompletableFuture<StatusResponse> future = userService.createUser(request);
 
-        // Esperamos el resultado
+
         StatusResponse result = future.join();
 
-        // Verificamos que se procesó correctamente
+
         assertEquals("User creation request successfully processed", result.getMessage());
         verify(userCreateRequestKafka).send("user-registration-events", request);
     }
 
     @Test
-    void testCreateUser_AlreadyExists() {
+    void createUserAlreadyExistsTest() {
         UserCreateRequest request = new UserCreateRequest("Gustavo", "Moyano", 25, true,"67890");
 
         when(userRepository.existsUserByNaturalKey("Gustavo", "Moyano", 25, "67890")).thenReturn(true);
@@ -71,7 +69,7 @@ public class createUserKafkaTests {
     }
 
     @Test
-    void testCreateUser_KafkaFails() {
+    void createUserKafkaFailsTest() {
         UserCreateRequest request = new UserCreateRequest("Max", "Payne", 40, true, "90210");
 
         when(userRepository.existsUserByNaturalKey(any(), any(), anyInt(), any())).thenReturn(false);

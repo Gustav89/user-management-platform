@@ -47,14 +47,10 @@ public class GlobalExceptionHandlerTests {
     private MockMvc mockMvc;
     @MockBean
     private IUserService userService;
-
     private UserCreateRequest userCreateRequest;
     private UserResponse userResponse;
-
     private  String jsonUser;
-
     private String jsonUserEdadnovalid;
-
     private  ObjectMapper objectMapper;
 
 
@@ -93,7 +89,7 @@ public class GlobalExceptionHandlerTests {
 
 
     @Test
-    public void testHandleUserAlreadyExistsException() throws Exception {
+    public void handleUserAlreadyExistsExceptionTest() throws Exception {
         doThrow(new UserAlreadyExistsException("User already exists")).when(userService).createUser(any(UserCreateRequest.class));
 
 
@@ -107,7 +103,7 @@ public class GlobalExceptionHandlerTests {
     }
 
     @Test
-    public void testHandleAsyncTaskFailureException() throws Exception {
+    public void handleAsyncTaskFailureExceptionTest() throws Exception {
 
         doThrow(new AsyncTaskFailureException("The async task failed with error:")).when(userService).createUser(any(UserCreateRequest.class));
 
@@ -122,7 +118,7 @@ public class GlobalExceptionHandlerTests {
     }
 
     @Test
-    public void testHandleUserNotFoundException() throws Exception {
+    public void handleUserNotFoundExceptionTest() throws Exception {
 
         doThrow(new UserNotFoundExeption("User not Exist")).when(userService).getUser(UUID.fromString("bc076e6e-cf94-4701-b90d-ce0059e8434f"));
 
@@ -133,7 +129,7 @@ public class GlobalExceptionHandlerTests {
     }
 
     @Test
-    public void testHandleInvalidParamException() throws Exception {
+    public void handleInvalidParamExceptionTest() throws Exception {
         mockMvc.perform(get("/api/v1/users/search").param("age","1007")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.status").value(HttpStatus.BAD_REQUEST.value()))
@@ -142,7 +138,7 @@ public class GlobalExceptionHandlerTests {
 
 
     @Test
-    public void testHandleInvalidParamExceptionAgeNotValidFormat() throws Exception {
+    public void handleInvalidParamExceptionAgeNotValidFormatTest() throws Exception {
         mockMvc.perform(get("/api/v1/users/search").param("age","A1007")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.status").value(HttpStatus.BAD_REQUEST.value()))
@@ -150,7 +146,7 @@ public class GlobalExceptionHandlerTests {
     }
 
     @Test
-    public void testHandleInvalidParamExceptionInvalidName() throws Exception {
+    public void handleInvalidParamExceptionInvalidNameTest() throws Exception {
         mockMvc.perform(get("/api/v1/users/search").param("name","A1007 *")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.status").value(HttpStatus.BAD_REQUEST.value()))
@@ -158,7 +154,7 @@ public class GlobalExceptionHandlerTests {
     }
 
     @Test
-    public void testHandleMethodArgumentNotValidException() throws Exception {
+    public void handleMethodArgumentNotValidExceptionTest() throws Exception {
         mockMvc.perform(post("/api/v1/users")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(jsonUserEdadnovalid))
