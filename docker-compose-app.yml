@@ -1,0 +1,20 @@
+version: "1.0"
+
+services:
+  user-management-platform:
+    image: user-management-platform-image
+    container_name: user-management-platform-container
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    environment:
+      SPRING_DATASOURCE_USERNAME: sa
+      SPRING_DATASOURCE_PASSWORD:
+      KAFKA_BOOTSTRAP_SERVERS: kafka-ibm:9092  # Configuración para Kafka en Docker
+    ports:
+      - 8080:8080
+    networks:
+      - user_management_network
+networks:
+  user_management_network:  # Red compartida entre los servicios
+    external: true

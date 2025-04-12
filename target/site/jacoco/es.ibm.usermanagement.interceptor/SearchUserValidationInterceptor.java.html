@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SearchUserValidationInterceptor.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">user-management-platform</a> &gt; <a href="index.source.html" class="el_package">es.ibm.usermanagement.interceptor</a> &gt; <span class="el_source">SearchUserValidationInterceptor.java</span></div><h1>SearchUserValidationInterceptor.java</h1><pre class="source lang-java linenums">package es.ibm.usermanagement.interceptor;
+
+import es.ibm.usermanagement.exception.custom.InvalidParamException;
+import org.springframework.stereotype.Component;
+import org.springframework.web.servlet.HandlerInterceptor;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.regex.Pattern;
+
+@Component
+<span class="nc" id="L12">public class SearchUserValidationInterceptor implements HandlerInterceptor {</span>
+
+<span class="nc" id="L14">    private static final Pattern NAME_PATTERN = Pattern.compile(&quot;^[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+([\\s'-][A-ZÁÉÍÓÚÑa-záéíóúñ]+)*$&quot;);</span>
+
+    @Override
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
+            throws Exception {
+
+<span class="nc bnc" id="L20" title="All 4 branches missed.">        if (request.getRequestURI().contains(&quot;/api/v1/users/search&quot;) &amp;&amp; request.getMethod().equals(&quot;GET&quot;)) {</span>
+<span class="nc" id="L21">            String ageParam = request.getParameter(&quot;age&quot;);</span>
+<span class="nc" id="L22">            String nameParam = request.getParameter(&quot;name&quot;);</span>
+
+<span class="nc bnc" id="L24" title="All 2 branches missed.">            if (ageParam != null) {</span>
+                try {
+<span class="nc" id="L26">                    int age = Integer.parseInt(ageParam);</span>
+<span class="nc bnc" id="L27" title="All 4 branches missed.">                    if (age &lt; 1 || age &gt; 150) {</span>
+<span class="nc" id="L28">                        throw new InvalidParamException(&quot;Age must be between 1 and 150&quot;, &quot;age&quot;);</span>
+                    }
+<span class="nc" id="L30">                } catch (NumberFormatException e) {</span>
+<span class="nc" id="L31">                    throw new InvalidParamException( &quot;Age must be a number&quot;,&quot;age&quot;);</span>
+<span class="nc" id="L32">                }</span>
+            }
+<span class="nc bnc" id="L34" title="All 4 branches missed.">            if (nameParam != null &amp;&amp; !NAME_PATTERN.matcher(nameParam).matches()) {</span>
+<span class="nc" id="L35">                throw new InvalidParamException(&quot;Invalid name format&quot;, &quot;name&quot;);</span>
+            }
+        }
+<span class="nc" id="L38">        return true;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

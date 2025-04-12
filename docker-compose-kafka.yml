@@ -1,0 +1,36 @@
+version: '3'
+services:
+  zookeeper:
+    image: 'bitnami/zookeeper:latest'
+    container_name: zookeeper-ibm
+    environment:
+      - ALLOW_ANONYMOUS_LOGIN=yes
+    networks:
+      - user_management_network
+    ports:
+      - '2181:2181'
+      
+
+  kafka:
+    image: 'bitnami/kafka:latest'
+    container_name: kafka-ibm
+    depends_on:
+      - zookeeper
+    ports:
+      - '9092:9092'
+      - '9093:9093'
+    environment:
+      - KAFKA_BROKER_ID=1
+      - KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181
+      - KAFKA_LISTENERS=INTERNAL://:9092,EXTERNAL://:9093
+      - KAFKA_ADVERTISED_LISTENERS=INTERNAL://kafka:9092,EXTERNAL://localhost:9093
+      - KAFKA_LISTENER_SECURITY_PROTOCOL_MAP=INTERNAL:PLAINTEXT,EXTERNAL:PLAINTEXT
+      - KAFKA_LISTENER_NAME=INTERNAL
+      - KAFKA_INTER_BROKER_LISTENER_NAME=INTERNAL  # <- Esta línea es clave
+      - ALLOW_PLAINTEXT_LISTENER=yes
+    networks:
+      -  user_management_network
+
+networks:
+  user_management_network:  # Red compartida entre los servicios
+    external: true
