@@ -11,6 +11,7 @@ services:
       SPRING_DATASOURCE_USERNAME: sa
       SPRING_DATASOURCE_PASSWORD:
       KAFKA_BOOTSTRAP_SERVERS: kafka-ibm:9092  # Configuración para Kafka en Docker
+      REDIS_HOST: redis-server
     ports:
       - 8080:8080
     networks:

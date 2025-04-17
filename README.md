@@ -38,6 +38,9 @@ docker network create user_management_network
 #Ejecutar docker compose de kafka
 docker-compose -f docker-compose-kafka.yml up -d
 
+#Ejecutar docker compose de redis
+docker-compose -f docker-compose-redis.yml up -d
+
 #entrer mediante terminal a kafka y crear topico
 docker exec -it kafka-ibm bash
 kafka-topics.sh --create --topic user-registration-events --bootstrap-server kafka:9092 --partitions 1 --replication-factor 1

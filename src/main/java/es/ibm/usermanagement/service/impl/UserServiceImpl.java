@@ -71,7 +71,7 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
-    @Cacheable(value = "users", key = "#id")
+    @Cacheable(value = "users", key = "#id" , cacheManager = "ttlCacheManager")
     public UserResponse getUser(UUID id) throws Exception {
         Optional<UserEntity> userEntity = userRepository.findById(id);
         if(userEntity.isPresent()){
@@ -81,7 +81,9 @@ public class UserServiceImpl implements IUserService {
     }
 
 
-    @Cacheable(value = "userSearchCache", key = "T(java.util.Objects).hash(#name, #age, #pageable.pageNumber, #pageable.pageSize, #pageable.sort)")
+    @Cacheable(value = "userSearchCache",
+            key = "T(java.util.Objects).hash(#name, #age, #pageable.pageNumber, #pageable.pageSize, #pageable.sort)",
+            cacheManager = "ttlCacheManager")
     @Override
     public Page<UserResponse> searchUsers(String name, Integer age, Pageable pageable) {
         Specification<UserEntity> spec = Specification
