@@ -12,6 +12,7 @@ import es.ibm.usermanagement.repository.ISearchUserRepository;
 import es.ibm.usermanagement.repository.spec.UserSpecifications;
 import es.ibm.usermanagement.service.IUserService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -70,6 +71,7 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
+    @Cacheable(value = "users", key = "#id")
     public UserResponse getUser(UUID id) throws Exception {
         Optional<UserEntity> userEntity = userRepository.findById(id);
         if(userEntity.isPresent()){
@@ -78,6 +80,8 @@ public class UserServiceImpl implements IUserService {
         throw new UserNotFoundExeption("User not Exist");
     }
 
+
+    @Cacheable(value = "userSearchCache", key = "T(java.util.Objects).hash(#name, #age, #pageable.pageNumber, #pageable.pageSize, #pageable.sort)")
     @Override
     public Page<UserResponse> searchUsers(String name, Integer age, Pageable pageable) {
         Specification<UserEntity> spec = Specification
