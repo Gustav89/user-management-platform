@@ -6,7 +6,6 @@ import es.ibm.usermanagement.dto.UserCreateRequest;
 import es.ibm.usermanagement.entity.UserEntity;
 import es.ibm.usermanagement.mapper.IUserMapper;
 import es.ibm.usermanagement.repository.ICreateUserRepository;
-import es.ibm.usermanagement.repository.ISearchUserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.kafka.annotation.KafkaListener;

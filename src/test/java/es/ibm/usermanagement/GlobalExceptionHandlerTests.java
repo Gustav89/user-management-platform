@@ -9,33 +9,24 @@ import es.ibm.usermanagement.exception.custom.AsyncTaskFailureException;
 import es.ibm.usermanagement.exception.custom.UserAlreadyExistsException;
 import es.ibm.usermanagement.exception.custom.UserNotFoundExeption;
 import es.ibm.usermanagement.exception.handler.GlobalExceptionHandler;
-import es.ibm.usermanagement.repository.ISearchUserRepository;
 import es.ibm.usermanagement.service.IUserService;
-import es.ibm.usermanagement.service.impl.UserServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 
@@ -135,6 +126,13 @@ public class GlobalExceptionHandlerTests {
                 .andExpect(jsonPath("$.status").value(HttpStatus.BAD_REQUEST.value()))
                 .andExpect(jsonPath("$.message").value("Invalid age"));
     }
+    @Test
+    public void handleInvalidParamMinusAgeExceptionTest() throws Exception {
+        mockMvc.perform(get("/api/v1/users/search").param("age","0")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.status").value(HttpStatus.BAD_REQUEST.value()))
+                .andExpect(jsonPath("$.message").value("Invalid age"));
+    }
 
 
     @Test
@@ -148,6 +146,22 @@ public class GlobalExceptionHandlerTests {
     @Test
     public void handleInvalidParamExceptionInvalidNameTest() throws Exception {
         mockMvc.perform(get("/api/v1/users/search").param("name","A1007 *")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.status").value(HttpStatus.BAD_REQUEST.value()))
+                .andExpect(jsonPath("$.message").value("Invalid name"));
+    }
+
+    @Test
+    public void handleInvalidParamExceptionInvalidNullNameTest() throws Exception {
+        mockMvc.perform(get("/api/v1/users/search").param("name","").param("age","34")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.status").value(HttpStatus.BAD_REQUEST.value()))
+                .andExpect(jsonPath("$.message").value("Invalid name"));
+    }
+
+    @Test
+    public void handleInvalidParamExceptionInvalidNameNumbersTest() throws Exception {
+        mockMvc.perform(get("/api/v1/users/search").param("name","Juan123").param("age","34")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.status").value(HttpStatus.BAD_REQUEST.value()))
                 .andExpect(jsonPath("$.message").value("Invalid name"));
